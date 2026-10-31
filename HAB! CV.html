@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="warm" data-mode="interactive">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hab CV — Cactus</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- Google Fonts: Spectral, Cormorant Garamond, Newsreader, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- ZeoSeven Open Webfont CDN for Huiwen-mincho (汇文明朝体) -->
+  <link rel="stylesheet" href="https://fontsapi.zeoseven.com/256/main/result.css" crossorigin="anonymous" />
+  <!-- GSAP & Flip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+  <!-- Supabase Official JS SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root, [data-theme="warm"] {
+      --bg-paper: #F6F4EE;
+      --bg-elevated: #EFECE3;
+      --bg-card: #FAF8F3;
+      --ink-primary: #171614;
+      --ink-secondary: #4E4B44;
+      --ink-muted: #7D786E;
+      --rule-color: #171614;
+      --rule-subtle: #D8D3C6;
+      --accent: #B83B2A;
+      --accent-soft: rgba(184, 59, 42, 0.1);
+      --cactus-green: #1E6B45;
+      --cactus-soft: rgba(30, 107, 69, 0.12);
+      --shadow-paper: 0 18px 45px -15px rgba(23, 22, 20, 0.07), 0 1px 3px rgba(23, 22, 20, 0.05);
+      --font-display: 'Cormorant Garamond', 'Spectral', 'Huiwen-mincho', '汇文明朝体', 'Songti SC', 'Noto Serif SC', serif;
+      --font-body: 'Spectral', 'Newsreader', 'Huiwen-mincho', '汇文明朝体', 'Songti SC', 'Noto Serif SC', serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="dark"] {
+      --bg-paper: #121210;
+      --bg-elevated: #1B1A17;
+      --bg-card: #171614;
+      --ink-primary: #EAE6DF;
+      --ink-secondary: #B8B2A6;
+      --ink-muted: #7C776B;
+      --rule-color: #DCD6CA;
+      --rule-subtle: #2D2B26;
+      --accent: #D96B52;
+      --accent-soft: rgba(217, 107, 82, 0.14);
+      --cactus-green: #38A169;
+      --cactus-soft: rgba(56, 161, 105, 0.16);
+      --shadow-paper: 0 24px 60px -15px rgba(0, 0, 0, 0.65), 0 1px 3px rgba(255, 255, 255, 0.04);
+    }
+
+    [data-mode="static"] {
+      --bg-paper: #FFFFFF;
+      --bg-elevated: #F7F7F5;
+      --bg-card: #FFFFFF;
+      --ink-primary: #000000;
+      --ink-secondary: #222222;
+      --ink-muted: #555555;
+      --rule-color: #000000;
+      --rule-subtle: #CCCCCC;
+      --shadow-paper: none;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background-color: var(--bg-paper);
+      color: var(--ink-primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .font-display-serif { font-family: var(--font-display); }
+    .font-mono-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    .ink-rule { height: 1.5px; background-color: var(--rule-color); transform-origin: left center; }
+
+    [contenteditable="true"] {
+      outline: none;
+      border-radius: 3px;
+      transition: background-color 0.15s ease;
+    }
+    [contenteditable="true"]:hover { background-color: var(--accent-soft); }
+    [contenteditable="true"]:focus {
+      background-color: var(--bg-elevated);
+      box-shadow: 0 0 0 1px var(--accent);
+      padding: 0 2px;
+    }
+
+    [data-mode="static"] .interactive-only { display: none !important; }
+    mark.search-hit {
+      background-color: var(--accent-soft);
+      color: var(--accent);
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #FFF !important; color: #000 !important; }
+      .cv-sheet { box-shadow: none !important; border: none !important; padding: 0 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Animated Onboarding Pill (Auto-dismisses after 4.5s) -->
+  <div id="onboardingToast" class="no-print fixed bottom-7 left-1/2 -translate-x-1/2 z-50 rounded-full border px-5 py-2.5 shadow-xl backdrop-blur-md flex items-center gap-3 text-xs" style="background: color-mix(in srgb, var(--bg-card) 94%, transparent); border-color: var(--rule-color);">
+    <span class="w-2 h-2 rounded-full" style="background: var(--cactus-green);"></span>
+    <span id="onboardingText">点击简历任意文字直接修改 · 登录后即可解锁导出与云端同步</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- TOP HEADER: Left Cactus, Center Hab CV, Right Search/Upload/Lang/Theme/Auth -->
+  <!-- ===================================================================== -->
+  <header class="no-print sticky top-0 z-30 border-b backdrop-blur-md" style="background-color: color-mix(in srgb, var(--bg-paper) 92%, transparent); border-color: var(--rule-subtle);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between border-b" style="border-color: var(--rule-subtle);">
+      <!-- Top-Left Green Cactus Button -->
+      <div class="flex items-center min-w-[130px]">
+        <button id="cactusLogoBtn" type="button" class="px-3 py-1 rounded-full border text-xs font-medium flex items-center gap-1.5 transition-all hover:opacity-85" style="background: var(--cactus-soft); border-color: var(--cactus-green); color: var(--cactus-green);">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20"/><path d="M8 6v5a4 4 0 0 0 4 4"/><path d="M16 8v4a4 4 0 0 1-4 4"/><path d="M8 22h8"/>
+          </svg>
+          <span class="font-display-serif tracking-wide font-semibold">Cactus</span>
+        </button>
+      </div>
+
+      <!-- Center Brand: Hab CV -->
+      <div class="flex items-center justify-center">
+        <a href="#cvSheet" class="font-display-serif font-semibold text-xl sm:text-2xl tracking-tight">Hab CV</a>
+      </div>
+
+      <!-- Right Controls: Search + Upload + Lang Switcher + Theme + Sign in -->
+      <div class="flex items-center justify-end gap-2 min-w-[130px]">
+        <div class="relative hidden md:flex items-center">
+          <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 pointer-events-none" style="color: var(--ink-muted);"></i>
+          <input id="cvSearchInput" type="text" placeholder="Search..." class="w-28 focus:w-40 transition-all rounded-full border pl-8 pr-3 py-1 text-xs focus:outline-none" style="background: var(--bg-elevated); border-color: var(--rule-subtle); color: var(--ink-primary);" />
+        </div>
+
+        <label for="uploadResumeInput" class="cursor-pointer px-2.5 py-1 rounded-full border text-xs flex items-center gap-1 hover:opacity-80" style="border-color: var(--rule-subtle); color: var(--ink-secondary); background: var(--bg-card);">
+          <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Upload</span>
+          <input id="uploadResumeInput" type="file" accept=".json" class="hidden" />
+        </label>
+
+        <!-- Language Switcher between Upload and Theme Toggle -->
+        <button id="langToggleBtn" type="button" class="px-2.5 py-1 rounded-full border text-xs font-mono-num font-medium hover:opacity-80 transition-opacity" style="border-color: var(--rule-subtle); background: var(--bg-elevated); color: var(--ink-primary);" title="一键切换中英文">
+          EN
+        </button>
+
+        <button id="themeToggleBtn" type="button" class="p-1.5 rounded-full border hover:opacity-80" style="border-color: var(--rule-subtle); color: var(--ink-secondary);" title="切换明暗主题">
+          <i data-lucide="sun-moon" class="w-3.5 h-3.5"></i>
+        </button>
+
+        <button id="openAuthModalBtn" type="button" class="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all hover:opacity-90" style="background: var(--ink-primary); color: var(--bg-paper);">
+          <i data-lucide="user" class="w-3.5 h-3.5"></i>
+          <span id="accountBtnLabel">Sign in</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Row 2: Centered 3-Column Navigation Bar -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 h-10 flex items-center justify-center text-xs">
+      <nav class="flex items-center justify-center gap-8">
+        <button id="modeInteractiveBtn" type="button" class="py-2 font-medium border-b-2 transition-all whitespace-nowrap" style="border-color: var(--accent); color: var(--ink-primary);">
+          Home
+        </button>
+        <button id="modeStaticBtn" type="button" class="py-2 font-medium border-b-2 border-transparent transition-all whitespace-nowrap hover:opacity-80" style="color: var(--ink-muted);">
+          Plain Text (HTML)
+        </button>
+        <button id="exportPrintBtn" type="button" class="py-2 font-medium border-b-2 border-transparent transition-all whitespace-nowrap hover:opacity-80 flex items-center gap-1" style="color: var(--ink-muted);">
+          <i data-lucide="lock" id="exportLockIcon" class="w-3 h-3"></i>
+          <span>Export / Print</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN WORKSPACE (Left CV Canvas + Right Editor Studio)                 -->
+  <!-- ===================================================================== -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT COLUMN: Main CV Canvas -->
+      <main class="lg:col-span-8">
+        <article id="cvSheet" class="cv-sheet rounded-sm border px-6 py-8 sm:px-12 sm:py-11" style="background: var(--bg-card); border-color: var(--rule-subtle); box-shadow: var(--shadow-paper);">
+
+          <!-- 1. HERO HEADER -->
+          <header class="pb-5">
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+              <h1 id="profileName" contenteditable="true" class="text-3xl sm:text-4xl font-bold tracking-wider" style="font-family: var(--font-display);">仙人掌</h1>
+              <div class="text-xs sm:text-[13px] font-mono-num flex items-center gap-2 whitespace-nowrap" style="color: var(--ink-secondary);">
+                <span>TEL: <span id="profilePhone" contenteditable="true">+86 188-0000-0000</span></span>
+                <span>|</span>
+                <span>Email: <span id="profileEmail" contenteditable="true" class="underline decoration-dotted underline-offset-2">ceo@holycactus.space</span></span>
+              </div>
+            </div>
+          </header>
+
+          <!-- 2. EDUCATION SECTION -->
+          <section class="cv-section mb-6">
+            <div class="flex items-baseline justify-between mb-1">
+              <h2 id="secTitleEdu" contenteditable="true" class="text-base sm:text-[17px] font-bold tracking-wide">教育背景</h2>
+            </div>
+            <div class="ink-rule mb-3"></div>
+            <div id="educationList" class="space-y-1.5"></div>
+          </section>
+
+          <!-- 3. WORK EXPERIENCE SECTION -->
+          <section class="cv-section mb-6">
+            <div class="flex items-baseline justify-between mb-1">
+              <h2 id="secTitleWork" contenteditable="true" class="text-base sm:text-[17px] font-bold tracking-wide">工作经历</h2>
+            </div>
+            <div class="ink-rule mb-4"></div>
+            <div id="workList" class="space-y-5"></div>
+          </section>
+
+          <!-- 4. INTERNSHIP SECTION -->
+          <section class="cv-section mb-6">
+            <div class="flex items-baseline justify-between mb-1">
+              <h2 id="secTitleIntern" contenteditable="true" class="text-base sm:text-[17px] font-bold tracking-wide">实习经历</h2>
+            </div>
+            <div class="ink-rule mb-4"></div>
+            <div id="internshipList" class="space-y-4"></div>
+          </section>
+
+          <!-- 5. SKILLS SECTION -->
+          <section class="cv-section">
+            <div class="flex items-baseline justify-between mb-1">
+              <h2 id="secTitleSkills" contenteditable="true" class="text-base sm:text-[17px] font-bold tracking-wide">专业技能</h2>
+            </div>
+            <div class="ink-rule mb-3"></div>
+            <div id="skillsList" class="space-y-1.5 text-[14px] leading-relaxed"></div>
+          </section>
+
+          <!-- Bottom Footer: Auto-Save Timestamp + Hacker · Artist · Builder -->
+          <footer class="mt-10 pt-4 border-t flex flex-col items-center justify-center gap-1.5 text-center" style="border-color: var(--rule-subtle);">
+            <div class="no-print flex items-center gap-1.5 text-[11px] font-mono-num" style="color: var(--ink-muted);">
+              <span id="syncDot" class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              <span id="lastSavedIndicator">已自动保存 (00:33:00)</span>
+            </div>
+            <div class="font-display-serif italic tracking-widest text-xs sm:text-sm pt-1" style="color: var(--ink-secondary);">
+              Hacker · Artist · Builder
+            </div>
+          </footer>
+        </article>
+      </main>
+
+      <!-- RIGHT COLUMN: Editor Studio with Centered 3-Column Bar at Top -->
+      <aside class="no-print lg:col-span-4 lg:sticky lg:top-28 rounded-sm border overflow-hidden" style="background: var(--bg-card); border-color: var(--rule-subtle); box-shadow: var(--shadow-paper);">
+        <!-- Centered 3-Column Tab Bar -->
+        <div class="grid grid-cols-3 border-b text-xs font-medium text-center" style="border-color: var(--rule-subtle); background: var(--bg-elevated);">
+          <button type="button" data-tab="tailor" class="studio-tab py-2.5 px-2 border-b-2 transition-all" style="border-color: var(--accent); color: var(--ink-primary); background: var(--bg-card);">
+            JD 重写
+          </button>
+          <button type="button" data-tab="voice" class="studio-tab py-2.5 px-2 border-b-2 border-transparent transition-all" style="color: var(--ink-muted);">
+            语音输入
+          </button>
+          <button type="button" data-tab="cloud" class="studio-tab py-2.5 px-2 border-b-2 border-transparent transition-all" style="color: var(--ink-muted);">
+            云端 / API
+          </button>
+        </div>
+
+        <!-- Tab 1: JD Tailor -->
+        <div id="pane-tailor" class="studio-pane p-5 space-y-4">
+          <div class="flex flex-wrap justify-center gap-1.5">
+            <button type="button" data-preset="general" class="preset-btn text-[11px] px-2.5 py-0.5 rounded border" style="border-color: var(--rule-subtle); color: var(--ink-secondary);">General</button>
+            <button type="button" data-preset="ai_pm" class="preset-btn text-[11px] px-2.5 py-0.5 rounded border" style="border-color: var(--accent); color: var(--accent);">AI PM</button>
+            <button type="button" data-preset="founder" class="preset-btn text-[11px] px-2.5 py-0.5 rounded border" style="border-color: var(--rule-subtle); color: var(--ink-secondary);">商业/增长</button>
+            <button type="button" data-preset="vc" class="preset-btn text-[11px] px-2.5 py-0.5 rounded border" style="border-color: var(--rule-subtle); color: var(--ink-secondary);">战略分析</button>
+          </div>
+          <textarea id="jdInput" rows="4" class="w-full rounded border p-2.5 text-xs leading-relaxed focus:outline-none" style="background: var(--bg-paper); border-color: var(--rule-subtle);" placeholder="粘贴目标岗位 JD，一键生成或切换针对性简历版本..."></textarea>
+          <button id="applyTailorBtn" type="button" class="w-full py-2 rounded text-xs font-medium text-white transition-opacity hover:opacity-90" style="background: var(--accent);">
+            智能匹配 JD 并切换重点
+          </button>
+        </div>
+
+        <!-- Tab 2: Voice Input -->
+        <div id="pane-voice" class="studio-pane hidden p-5 space-y-4">
+          <div class="flex flex-col items-center justify-center py-3 rounded border" style="background: var(--bg-elevated); border-color: var(--rule-subtle);">
+            <button id="micRecordBtn" type="button" class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow" style="background: var(--cactus-green);">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+            <span id="micStatus" class="mt-1.5 text-[11px] font-mono-num" style="color: var(--ink-muted);">点击麦克风口述或直接输入</span>
+          </div>
+          <textarea id="voiceInput" rows="3" class="w-full rounded border p-2.5 text-xs leading-relaxed focus:outline-none" style="background: var(--bg-paper); border-color: var(--rule-subtle);" placeholder="例如：主导核心工作流改版上线，次月转化率由 12% 提升至 24%..."></textarea>
+          <button id="insertVoiceBtn" type="button" class="w-full py-2 rounded text-xs font-medium text-white transition-opacity hover:opacity-90" style="background: var(--cactus-green);">
+            + 提炼并插入至首段经历
+          </button>
+        </div>
+
+        <!-- Tab 3: Supabase Cloud & API Config -->
+        <div id="pane-cloud" class="studio-pane hidden p-5 space-y-3 text-xs">
+          <div class="space-y-2">
+            <span class="font-bold block">Supabase 云端数据库配置</span>
+            <input id="sbUrlInput" type="text" placeholder="https://xxxx.supabase.co" class="w-full rounded border px-2.5 py-1.5 font-mono-num text-[11px]" style="background: var(--bg-paper); border-color: var(--rule-subtle);" />
+            <input id="sbAnonKeyInput" type="password" placeholder="Supabase anon public key" class="w-full rounded border px-2.5 py-1.5 font-mono-num text-[11px]" style="background: var(--bg-paper); border-color: var(--rule-subtle);" />
+          </div>
+          <div class="space-y-2 pt-2 border-t" style="border-color: var(--rule-subtle);">
+            <span class="font-bold block">低成本 AI Token (可选 BYOK)</span>
+            <input id="llmBaseUrlInput" type="text" value="https://api.deepseek.com/v1" class="w-full rounded border px-2.5 py-1.5 font-mono-num text-[11px]" style="background: var(--bg-paper); border-color: var(--rule-subtle);" />
+            <input id="llmKeyInput" type="password" placeholder="sk-... (留空则调用默认引擎)" class="w-full rounded border px-2.5 py-1.5 font-mono-num text-[11px]" style="background: var(--bg-paper); border-color: var(--rule-subtle);" />
+          </div>
+          <button id="saveCloudConfigBtn" type="button" class="w-full py-1.5 rounded font-medium text-white" style="background: var(--ink-primary); color: var(--bg-paper);">
+            保存连接配置
+          </button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: 登录鉴权门禁 (Sign in required to Export & Sync)              -->
+  <!-- ===================================================================== -->
+  <div id="authModal" class="no-print fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-lg border shadow-2xl overflow-hidden" style="background: var(--bg-card); border-color: var(--rule-subtle);">
+      <div class="px-6 py-4 border-b flex items-center justify-between" style="border-color: var(--rule-subtle);">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full" style="background: var(--cactus-green);"></span>
+          <h3 id="authModalTitle" class="font-display-serif font-bold text-lg">Sign in to Hab CV</h3>
+        </div>
+        <button id="closeAuthModalBtn" type="button" class="p-1 rounded hover:opacity-75">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div id="authGateBanner" class="hidden p-2.5 rounded border text-[11px]" style="background: var(--accent-soft); border-color: var(--accent); color: var(--accent);">
+          导出 HTML / 打印 PDF 需要先完成邮箱登录验证。
+        </div>
+
+        <!-- Step 1: Send OTP -->
+        <div id="authStepEmail" class="space-y-3">
+          <p class="leading-relaxed" style="color: var(--ink-secondary);">
+            输入你的邮箱以接收 <strong>6 位验证码</strong>，登录后即可解锁简历导出并开启云端自动保存。
+          </p>
+          <div>
+            <label class="block font-mono-num mb-1" style="color: var(--ink-muted);">Email</label>
+            <input id="authEmailInput" type="email" value="ceo@holycactus.space" class="w-full rounded border px-3 py-2 font-mono-num" style="background: var(--bg-paper); border-color: var(--rule-subtle); color: var(--ink-primary);" />
+          </div>
+          <button id="sendOtpBtn" type="button" class="w-full py-2 rounded font-medium text-white transition-opacity hover:opacity-90" style="background: var(--cactus-green);">
+            发送验证码 (Send Code)
+          </button>
+        </div>
+
+        <!-- Step 2: Verify 6-Digit Code -->
+        <div id="authStepOtp" class="hidden space-y-3">
+          <p class="leading-relaxed" style="color: var(--ink-secondary);">
+            验证码已发送至 <strong id="sentEmailDisplay" class="font-mono-num"></strong>，请输入 6 位数字验证码：
+          </p>
+          <div>
+            <input id="authOtpCodeInput" type="text" maxlength="6" placeholder="123456" class="w-full rounded border px-3 py-2 text-center font-mono-num text-lg tracking-[0.4em] font-bold" style="background: var(--bg-paper); border-color: var(--rule-color); color: var(--ink-primary);" />
+          </div>
+          <button id="verifyOtpBtn" type="button" class="w-full py-2 rounded font-medium text-white transition-opacity hover:opacity-90" style="background: var(--accent);">
+            验证并解锁导出 (Verify & Unlock)
+          </button>
+          <button id="backToEmailStepBtn" type="button" class="w-full py-1 text-[11px] underline" style="color: var(--ink-muted);">
+            返回修改邮箱
+          </button>
+        </div>
+
+        <div id="authStatusMsg" class="text-[11px] font-mono-num text-center" style="color: var(--accent);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: 已登录用户专属导出面板 (Unlocked Export & Print Modal)         -->
+  <!-- ===================================================================== -->
+  <div id="exportModal" class="no-print fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-lg border shadow-2xl overflow-hidden" style="background: var(--bg-card); border-color: var(--rule-subtle);">
+      <div class="px-6 py-4 border-b flex items-center justify-between" style="border-color: var(--rule-subtle);">
+        <h3 class="font-display-serif font-bold text-lg">Export / Print CV</h3>
+        <button id="closeExportModalBtn" type="button" class="p-1 rounded hover:opacity-75">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-3 text-xs">
+        <button id="downloadStaticHtmlBtn" type="button" class="w-full p-3 rounded border text-left flex items-center justify-between hover:opacity-90" style="background: var(--bg-elevated); border-color: var(--cactus-green);">
+          <div>
+            <div class="font-bold" style="color: var(--cactus-green);">下载纯静态 index.html</div>
+            <div class="text-[11px] mt-0.5" style="color: var(--ink-secondary);">单文件零依赖 HTML，可直接部署或发送</div>
+          </div>
+          <i data-lucide="file-code" class="w-4 h-4" style="color: var(--cactus-green);"></i>
+        </button>
+
+        <button id="triggerPrintPdfBtn" type="button" class="w-full p-3 rounded border text-left flex items-center justify-between hover:opacity-90" style="background: var(--bg-paper); border-color: var(--rule-subtle);">
+          <div>
+            <div class="font-bold">打印 / 导出 PDF</div>
+            <div class="text-[11px] mt-0.5" style="color: var(--ink-secondary);">调用系统原生无边距高清打印</div>
+          </div>
+          <i data-lucide="printer" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION ENGINE: ULTRA-GENERIC DATA + AUTH-GATED EXPORT            -->
+  <!-- ===================================================================== -->
+  <script>
+    // Fill in your Supabase Project URL & Anon Key when deploying to holycactus.space
+    const DEFAULT_SUPABASE_URL = ""; 
+    const DEFAULT_SUPABASE_ANON_KEY = "";
+
+    let currentLang = "zh";
+    let searchQuery = "";
+    let supabaseClient = null;
+    let currentUser = null;
+    let pendingExportAction = false;
+
+    // ULTRA-GENERALIZED & RANDOMIZED TEMPLATE DATA (Zero recognizable personal traits)
+    const INITIAL_DATA = {
+      zh: {
+        name: "仙人掌",
+        phone: "+86 188-0000-0000",
+        email: "ceo@holycactus.space",
+        secEdu: "教育背景",
+        secWork: "工作经历",
+        secIntern: "实习经历",
+        secSkills: "专业技能",
+        education: [
+          { school: "某大学", degree: "计算机科学与技术硕士", period: "2023.09 - 2025.06" },
+          { school: "某大学", degree: "工商管理学士", period: "2019.09 - 2023.06" }
+        ],
+        work: [
+          {
+            id: "w1",
+            company: "创作者工具 SaaS",
+            location: "Remote",
+            period: "2025.03 - 2026.02",
+            role: "产品负责人",
+            activeVariant: "general",
+            variants: {
+              general: [
+                { label: "产品规划", text: "负责核心产品从 0 到 1 的需求定义与版本规划，围绕内容创作者的日常排版、多渠道分发与数据复盘场景构建核心功能闭环。" },
+                { label: "设计与研发", text: "主导产品 UI/UX 交互设计与前端原型实现，建立标准化组件库，将新功能从概念设计到上线验证的平均周期缩短 50%。" },
+                { label: "增长与商业化", text: "搭建 SEO 内容矩阵与自动化用户触达流程，结合漏斗转化数据持续迭代注册引导流，上线首季度积累 1,500+ 活跃创作者并完成早期订阅变现验证。" }
+              ],
+              ai_pm: [
+                { label: "AI 工作流定义", text: "设计智能改写、多风格迁移与自动化排版工作流，显著提升创作者长短文转换效率，功能渗透率达 65%。" },
+                { label: "全栈原型交付", text: "运用 AI Coding 工具直接编写高保真交互前端，快速完成多轮用户可用性测试。" }
+              ],
+              founder: [
+                { label: "0-1 业务闭环", text: "统筹产品研发、早期种子用户招募与订阅定价策略，零付费投放实现首季度 1,500+ 自然增长用户与正向现金流。" }
+              ],
+              vc: [
+                { label: "市场洞察与留存", text: "通过高频用户访谈与行为埋点分析锁定高留存用户群，首月次周留存率提升至 48%。" }
+              ]
+            }
+          },
+          {
+            id: "w2",
+            company: "AI 效率应用",
+            location: "上海",
+            period: "2024.05 - 2025.02",
+            role: "高级产品经理",
+            activeVariant: "general",
+            variants: {
+              general: [
+                { label: "核心功能设计", text: "负责智能知识库与个性化助手模块的产品设计，梳理上下文检索、多轮对话状态管理与动态内容生成逻辑，提升单次会话完成率。" },
+                { label: "种子用户运营", text: "统筹早期内测邀请体系与用户反馈社群，发放 3,000+ 内测码并达成 35% 激活转化率，沉淀核心高频用户反馈池驱动产品周更迭代。" }
+              ],
+              ai_pm: [
+                { label: "Agent 状态机设计", text: "主导多轮任务拆解与上下文记忆检索机制设计，配合评测集持续优化回答准确率与响应延迟。" }
+              ],
+              founder: [
+                { label: "产品冷启动", text: "策划线上产品演示与技术社区内容传播，单月获取 30,000+ 自然曝光与 35% 内测转化。" }
+              ],
+              vc: [
+                { label: "PMF 早期验证", text: "建立核心留存与交互深度指标看板，快速验证高频知识工作者场景的付费转化潜力。" }
+              ]
+            }
+          },
+          {
+            id: "w3",
+            company: "企业级智能工作流平台",
+            location: "北京",
+            period: "2023.07 - 2024.04",
+            role: "产品经理",
+            activeVariant: "general",
+            variants: {
+              general: [
+                { label: "产品架构", text: "负责管理后台中控台与业务端协同工作流设计，针对复杂审批与知识查询场景搭建多智能体（Multi-Agent）协同流与行业知识检索库。" },
+                { label: "商业落地", text: "配合商业化团队推进标杆客户 POC 交付与渠道拓展，在半年内完成 10+ 企业客户签约落地，实现营收从 0 到百万级的突破。" }
+              ],
+              ai_pm: [
+                { label: "知识检索与评估", text: "构建垂直业务知识图谱与检索增强（RAG）管线，联合领域专家制定自动化评估基准（Eval Benchmark）。" }
+              ],
+              founder: [
+                { label: "B 端商业化拓展", text: "跑通“标杆客户定制验证 + 标准化SaaS模块复用”的销售路径，半年内达成 10+ 政企与渠道客户签约。" }
+              ],
+              vc: [
+                { label: "企业级交付闭环", text: "深度参与从需求调研、产品架构到商业化交付全流程，验证高客单价企业级 AI 解决方案的交付效率。" }
+              ]
+            }
+          }
+        ],
+        internships: [
+          {
+            company: "某科技公司 · 产品策划实习生",
+            location: "深圳",
+            period: "2022.06 - 2022.11",
+            bullets: [
+              "协助产品经理完成竞品功能拆解、用户调研访谈与需求文档（PRD）撰写，跟进版本测试与上线验收。",
+              "搭建日常业务数据监控看板，定期输出漏斗转化分析周报并提出交互优化建议。"
+            ]
+          },
+          {
+            company: "某咨询机构 · 商业分析实习生",
+            location: "上海",
+            period: "2021.10 - 2022.02",
+            bullets: [
+              "搜集整理软件与科技行业公开市场数据，参与桌面研究、专家访谈纪要整理及行业竞争格局分析报告撰写。"
+            ]
+          }
+        ],
+        skills: [
+          { label: "产品与设计", text: "擅长从 0 到 1 产品定义、PRD 撰写、Figma 交互原型设计、增长漏斗分析与可用性测试" },
+          { label: "AI 与工程工具", text: "熟练使用主流 AI Coding 工具、前端交互动效库（GSAP）与自动化脚本，能独立构建高保真可交互产品原型" }
+        ]
+      },
+      en: {
+        name: "Cactus",
+        phone: "+86 188-0000-0000",
+        email: "ceo@holycactus.space",
+        secEdu: "Education",
+        secWork: "Work Experience",
+        secIntern: "Internship Experience",
+        secSkills: "Professional Skills",
+        education: [
+          { school: "University A", degree: "M.S. in Computer Science & Technology", period: "2023.09 - 2025.06" },
+          { school: "University B", degree: "B.B.A. in Business Administration", period: "2019.09 - 2023.06" }
+        ],
+        work: [
+          {
+            id: "w1",
+            company: "Creator Tools SaaS",
+            location: "Remote",
+            period: "2025.03 - 2026.02",
+            role: "Product Lead",
+            activeVariant: "general",
+            variants: {
+              general: [
+                { label: "Product Strategy", text: "Led 0-to-1 product definition and roadmap execution for content formatting, multi-channel scheduling, and analytics workflows." },
+                { label: "Design & Engineering", text: "Directed UI/UX interaction design and front-end implementation, cutting average feature delivery cycle by 50%." },
+                { label: "Growth & Monetization", text: "Built SEO content pipelines and automated onboarding funnels, acquiring 1,500+ active creators and validating early subscription revenue." }
+              ],
+              ai_pm: [{ label: "AI Workflow Design", text: "Architected intelligent style-transfer and automated publishing workflows with a 65% feature adoption rate." }],
+              founder: [{ label: "0-to-1 GTM", text: "Scaled organic acquisition to 1,500+ creators and validated subscription monetization with zero paid ad spend." }],
+              vc: [{ label: "Cohort Retention", text: "Improved Week-2 user retention to 48% through continuous funnel telemetry and user interviews." }]
+            }
+          },
+          {
+            id: "w2",
+            company: "AI Productivity App",
+            location: "Shanghai",
+            period: "2024.05 - 2025.02",
+            role: "Senior Product Manager",
+            activeVariant: "general",
+            variants: {
+              general: [
+                { label: "Core Feature UX", text: "Designed personal knowledge base and adaptive assistant modules, optimizing multi-turn context management and task completion rates." },
+                { label: "Seed User Growth", text: "Managed beta invite rollout (3,000+ codes) achieving a 35% activation rate and establishing a rapid weekly iteration loop." }
+              ],
+              ai_pm: [{ label: "Agent State Machine", text: "Engineered multi-step task decomposition and context retrieval workflows backed by automated evaluation sets." }],
+              founder: [{ label: "Community Launch", text: "Generated 30,000+ organic impressions and 35% beta invite conversion across tech communities." }],
+              vc: [{ label: "PMF Telemetry", text: "Built retention and session-depth dashboards to validate willingness-to-pay among knowledge workers." }]
+            }
+          },
+          {
+            id: "w3",
+            company: "Enterprise Workflow Platform",
+            location: "Beijing",
+            period: "2023.07 - 2024.04",
+            role: "Product Manager",
+            activeVariant: "general",
+            variants: {
+              general: [
+                { label: "Platform Architecture", text: "Designed admin consoles and Multi-Agent collaborative workflows integrated with domain RAG knowledge bases." },
+                { label: "Commercial Delivery", text: "Delivered POC deployments and onboarded 10+ enterprise clients within 6 months." }
+              ],
+              ai_pm: [{ label: "RAG & Evaluation", text: "Built domain knowledge retrieval pipelines and standardized evaluation benchmarks." }],
+              founder: [{ label: "B2B Expansion", text: "Closed 10+ enterprise and channel partnerships through modular SaaS packaging." }],
+              vc: [{ label: "Enterprise Execution", text: "Validated end-to-end delivery efficiency and unit economics for high-ACV enterprise software." }]
+            }
+          }
+        ],
+        internships: [
+          {
+            company: "Tech Company · Product Management Intern",
+            location: "Shenzhen",
+            period: "2022.06 - 2022.11",
+            bullets: [
+              "Assisted in competitive analysis, user interviews, PRD drafting, and release QA.",
+              "Maintained weekly funnel conversion dashboards and proposed onboarding UX improvements."
+            ]
+          },
+          {
+            company: "Consulting Firm · Business Analyst Intern",
+            location: "Shanghai",
+            period: "2021.10 - 2022.02",
+            bullets: [
+              "Conducted desktop research, expert interview synthesis, and market landscape reports for enterprise software sectors."
+            ]
+          }
+        ],
+        skills: [
+          { label: "Product & Design", text: "0-to-1 product definition, PRD specification, Figma prototyping, funnel analytics, and usability testing" },
+          { label: "AI & Engineering", text: "Proficient in AI coding agents, interactive front-end animation (GSAP), and rapid full-stack prototyping" }
+        ]
+      }
+    };
+
+    const STORAGE_KEY = "hab_cv_public_v4";
+    const CLOUD_CFG_KEY = "hab_cv_cloud_cfg_v4";
+    let cvState = JSON.parse(JSON.stringify(INITIAL_DATA));
+
+    function formatNow() {
+      const d = new Date();
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
+    }
+
+    function loadLocalState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.zh && parsed.en) cvState = parsed;
+        }
+      } catch (e) {}
+    }
+
+    function saveState() {
+      const ts = formatNow();
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cvState));
+      } catch (e) {}
+      const ind = document.getElementById("lastSavedIndicator");
+      if (ind) {
+        ind.textContent = currentLang === "zh" ? `已自动保存 (${ts})` : `Auto-saved (${ts})`;
+      }
+      if (supabaseClient && currentUser) {
+        clearTimeout(window.__cloudSyncTimer);
+        window.__cloudSyncTimer = setTimeout(syncToSupabaseCloud, 800);
+      }
+    }
+
+    async function syncToSupabaseCloud() {
+      if (!supabaseClient || !currentUser) return;
+      try {
+        const { error } = await supabaseClient
+          .from("resumes")
+          .upsert({
+            user_id: currentUser.id,
+            email: currentUser.email,
+            cv_data: cvState
+          }, { onConflict: "user_id" });
+        if (!error) {
+          const ind = document.getElementById("lastSavedIndicator");
+          if (ind) ind.textContent = currentLang === "zh" ? `已同步云端 (${formatNow()})` : `Cloud Synced (${formatNow()})`;
+        }
+      } catch (e) {}
+    }
+
+    function highlightSearch(str) {
+      if (!searchQuery) return str;
+      const esc = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return str.replace(new RegExp(`(${esc})`, 'gi'), '<mark class="search-hit">$1</mark>');
+    }
+
+    function renderCV() {
+      const d = cvState[currentLang];
+      document.getElementById("profileName").innerHTML = highlightSearch(d.name);
+      document.getElementById("profilePhone").textContent = d.phone;
+      document.getElementById("profileEmail").textContent = d.email;
+      document.getElementById("secTitleEdu").textContent = d.secEdu;
+      document.getElementById("secTitleWork").textContent = d.secWork;
+      document.getElementById("secTitleIntern").textContent = d.secIntern;
+      document.getElementById("secTitleSkills").textContent = d.secSkills;
+
+      // Education: Single line, unparenthesized dates
+      document.getElementById("educationList").innerHTML = d.education.map((e, idx) => `
+        <div class="flex items-baseline justify-between gap-4 flex-nowrap whitespace-nowrap overflow-x-auto py-0.5">
+          <div class="flex items-baseline gap-2.5 truncate">
+            <span contenteditable="true" data-sec="edu" data-idx="${idx}" data-field="school" class="font-bold text-[15px]">${highlightSearch(e.school)}</span>
+            <span contenteditable="true" data-sec="edu" data-idx="${idx}" data-field="degree" class="text-[14px]" style="color: var(--ink-secondary);">${highlightSearch(e.degree)}</span>
+          </div>
+          <span contenteditable="true" data-sec="edu" data-idx="${idx}" data-field="period" class="font-mono-num text-xs sm:text-[13px] shrink-0" style="color: var(--ink-secondary);">${e.period}</span>
+        </div>
+      `).join("");
+
+      // Work Experience: Single line header, non-wrapping variant pills and dates
+      const vLabels = currentLang === "zh"
+        ? { general: "General", ai_pm: "AI PM", founder: "商业/增长", vc: "战略分析" }
+        : { general: "General", ai_pm: "AI PM", founder: "Growth", vc: "Strategy" };
+
+      document.getElementById("workList").innerHTML = d.work.map((w, wIdx) => {
+        const bullets = w.variants[w.activeVariant] || w.variants.general;
+        return `
+          <div class="work-card space-y-1">
+            <div class="flex items-center justify-between gap-2 flex-nowrap whitespace-nowrap overflow-x-auto">
+              <div class="flex items-baseline gap-2 truncate">
+                <h3 contenteditable="true" data-sec="work" data-idx="${wIdx}" data-field="company" class="font-bold text-[15.5px]">${highlightSearch(w.company)}</h3>
+                <span class="text-xs" style="color: var(--ink-muted);">|</span>
+                <span contenteditable="true" data-sec="work" data-idx="${wIdx}" data-field="location" class="text-xs sm:text-[13px]" style="color: var(--ink-secondary);">${highlightSearch(w.location)}</span>
+              </div>
+              <div class="flex items-center gap-2 shrink-0 flex-nowrap whitespace-nowrap">
+                <div class="interactive-only no-print inline-flex items-center rounded border p-0.5 text-[10px] font-mono-num flex-nowrap whitespace-nowrap" style="border-color: var(--rule-subtle); background: var(--bg-elevated);">
+                  ${Object.keys(vLabels).map(k => `
+                    <button type="button" data-work="${w.id}" data-var="${k}" class="var-btn px-1.5 py-0.5 rounded whitespace-nowrap transition-all ${w.activeVariant === k ? 'font-bold' : 'opacity-60'}" style="${w.activeVariant === k ? 'background: var(--accent); color: #fff;' : ''}">${vLabels[k]}</button>
+                  `).join("")}
+                </div>
+                <span contenteditable="true" data-sec="work" data-idx="${wIdx}" data-field="period" class="font-mono-num text-xs sm:text-[13px] shrink-0" style="color: var(--ink-secondary);">${w.period}</span>
+              </div>
+            </div>
+            <div contenteditable="true" data-sec="work" data-idx="${wIdx}" data-field="role" class="italic text-[14px] font-medium" style="color: var(--ink-secondary);">${highlightSearch(w.role)}</div>
+            <ul class="space-y-1 pl-4 list-disc marker:text-[11px] pt-0.5">
+              ${bullets.map((b, bIdx) => `
+                <li class="text-[14px] leading-[1.65]">
+                  <strong contenteditable="true" data-sec="bullet-label" data-widx="${wIdx}" data-bidx="${bIdx}" class="font-bold">${highlightSearch(b.label)}</strong>：<span contenteditable="true" data-sec="bullet-text" data-widx="${wIdx}" data-bidx="${bIdx}">${highlightSearch(b.text)}</span>
+                </li>
+              `).join("")}
+            </ul>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".var-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const item = d.work.find(x => x.id === btn.dataset.work);
+          if (item) {
+            item.activeVariant = btn.dataset.var;
+            renderCV();
+            saveState();
+          }
+        });
+      });
+
+      // Internships
+      document.getElementById("internshipList").innerHTML = d.internships.map((i) => `
+        <div class="space-y-1">
+          <div class="flex items-baseline justify-between gap-4 flex-nowrap whitespace-nowrap overflow-x-auto">
+            <div class="flex items-baseline gap-2 truncate">
+              <h3 contenteditable="true" class="font-bold text-[15px]">${highlightSearch(i.company)}</h3>
+              <span class="text-xs" style="color: var(--ink-muted);">|</span>
+              <span contenteditable="true" class="text-xs sm:text-[13px]" style="color: var(--ink-secondary);">${highlightSearch(i.location)}</span>
+            </div>
+            <span contenteditable="true" class="font-mono-num text-xs sm:text-[13px] shrink-0" style="color: var(--ink-secondary);">${i.period}</span>
+          </div>
+          <ul class="space-y-1 pl-4 list-disc marker:text-[11px]">
+            ${i.bullets.map(b => `<li contenteditable="true" class="text-[14px] leading-[1.65]">${highlightSearch(b)}</li>`).join("")}
+          </ul>
+        </div>
+      `).join("");
+
+      // Skills
+      document.getElementById("skillsList").innerHTML = d.skills.map(s => `
+        <div class="flex items-baseline gap-2">
+          <span class="font-mono-num text-xs" style="color: var(--cactus-green);">✓</span>
+          <div><strong contenteditable="true" class="font-bold">${highlightSearch(s.label)}</strong>：<span contenteditable="true">${highlightSearch(s.text)}</span></div>
+        </div>
+      `).join("");
+
+      document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        el.addEventListener("blur", () => {
+          const sec = el.dataset.sec;
+          if (sec === "edu") {
+            d.education[el.dataset.idx][el.dataset.field] = el.innerText.trim();
+          } else if (sec === "work") {
+            d.work[el.dataset.idx][el.dataset.field] = el.innerText.trim();
+          } else if (sec === "bullet-label") {
+            const w = d.work[el.dataset.widx];
+            w.variants[w.activeVariant][el.dataset.bidx].label = el.innerText.trim();
+          } else if (sec === "bullet-text") {
+            const w = d.work[el.dataset.widx];
+            w.variants[w.activeVariant][el.dataset.bidx].text = el.innerText.trim();
+          }
+          saveState();
+        });
+      });
+    }
+
+    function generateCleanStaticHtml() {
+      const d = cvState[currentLang];
+      const eduHtml = d.education.map(e => `<div class="row"><div><strong>${e.school}</strong> ${e.degree}</div><div class="mono">${e.period}</div></div>`).join("");
+      const workHtml = d.work.map(w => {
+        const bullets = w.variants[w.activeVariant] || w.variants.general;
+        const lis = bullets.map(b => `<li><strong>${b.label}</strong>：${b.text}</li>`).join("");
+        return `<div class="block"><div class="row"><div><strong>${w.company}</strong> | ${w.location}</div><div class="mono">${w.period}</div></div><div class="role">${w.role}</div><ul>${lis}</ul></div>`;
+      }).join("");
+      const internHtml = d.internships.map(i => {
+        const lis = i.bullets.map(b => `<li>${b}</li>`).join("");
+        return `<div class="block"><div class="row"><div><strong>${i.company}</strong> | ${i.location}</div><div class="mono">${i.period}</div></div><ul>${lis}</ul></div>`;
+      }).join("");
+      const skillHtml = d.skills.map(s => `<div>✓ <strong>${s.label}</strong>：${s.text}</div>`).join("");
+
+      return `<!DOCTYPE html><html lang="${currentLang}"><head><meta charset="UTF-8"><title>${d.name} - CV</title><link rel="stylesheet" href="https://fontsapi.zeoseven.com/256/main/result.css"><link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono&display=swap" rel="stylesheet"><style>body{max-width:780px;margin:36px auto;padding:0 24px;font-family:'Spectral','Huiwen-mincho',serif;color:#111;line-height:1.62;font-size:14px}h1{font-size:26px;margin:0 0 6px}h2{font-size:15px;border-bottom:1.5px solid #111;padding-bottom:3px;margin:18px 0 10px}.row{display:flex;justify-content:space-between;align-items:baseline}.role{font-style:italic;color:#333;margin:2px 0 4px}.mono{font-family:'JetBrains Mono',monospace;font-size:12.5px}.block{margin-bottom:14px}ul{margin:4px 0 0;padding-left:18px}</style></head><body><h1>${d.name}</h1><div>TEL: ${d.phone} | Email: ${d.email}</div><h2>${d.secEdu}</h2>${eduHtml}<h2>${d.secWork}</h2>${workHtml}<h2>${d.secIntern}</h2>${internHtml}<h2>${d.secSkills}</h2>${skillHtml}</body></html>`;
+    }
+
+    function initSupabase() {
+      let cfg = { sbUrl: DEFAULT_SUPABASE_URL, sbKey: DEFAULT_SUPABASE_ANON_KEY };
+      try {
+        const saved = JSON.parse(localStorage.getItem(CLOUD_CFG_KEY) || "null");
+        if (saved && saved.sbUrl && saved.sbKey) cfg = saved;
+      } catch (e) {}
+
+      if (cfg.sbUrl && cfg.sbKey && window.supabase) {
+        supabaseClient = window.supabase.createClient(cfg.sbUrl, cfg.sbKey);
+        supabaseClient.auth.getSession().then(({ data: { session } }) => {
+          if (session?.user) {
+            onUserAuthenticated(session.user);
+          }
+        });
+      }
+    }
+
+    async function onUserAuthenticated(user) {
+      currentUser = user;
+      document.getElementById("accountBtnLabel").textContent = user.email.split("@")[0];
+      const lockIcon = document.getElementById("exportLockIcon");
+      if (lockIcon) lockIcon.setAttribute("data-lucide", "unlock");
+      lucide.createIcons();
+
+      if (supabaseClient) {
+        const { data } = await supabaseClient
+          .from("resumes")
+          .select("cv_data")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (data?.cv_data?.zh) {
+          cvState = data.cv_data;
+          renderCV();
+        } else {
+          await syncToSupabaseCloud();
+        }
+      }
+
+      if (pendingExportAction) {
+        pendingExportAction = false;
+        openExportDialog();
+      }
+    }
+
+    function openExportDialog() {
+      const exportModal = document.getElementById("exportModal");
+      exportModal.classList.remove("hidden");
+      exportModal.classList.add("flex");
+    }
+
+    function handleExportAttempt() {
+      if (!currentUser) {
+        // Require Sign in before exporting
+        pendingExportAction = true;
+        document.getElementById("authGateBanner").classList.remove("hidden");
+        const authModal = document.getElementById("authModal");
+        authModal.classList.remove("hidden");
+        authModal.classList.add("flex");
+      } else {
+        openExportDialog();
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadLocalState();
+      renderCV();
+      lucide.createIcons();
+      initSupabase();
+      saveState();
+
+      gsap.fromTo(".ink-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.75, stagger: 0.1, ease: "power3.inOut" });
+
+      const ob = document.getElementById("onboardingToast");
+      if (ob) {
+        gsap.fromTo(ob, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" });
+        gsap.to(ob, { y: 16, opacity: 0, duration: 0.4, delay: 4.5, onComplete: () => ob.classList.add("hidden") });
+      }
+
+      document.getElementById("cactusLogoBtn")?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      document.getElementById("langToggleBtn").addEventListener("click", (e) => {
+        currentLang = currentLang === "zh" ? "en" : "zh";
+        e.currentTarget.textContent = currentLang === "zh" ? "EN" : "中";
+        renderCV();
+        saveState();
+      });
+
+      document.getElementById("themeToggleBtn").addEventListener("click", () => {
+        const next = document.documentElement.getAttribute("data-theme") === "warm" ? "dark" : "warm";
+        document.documentElement.setAttribute("data-theme", next);
+        saveState();
+      });
+
+      document.getElementById("cvSearchInput")?.addEventListener("input", (e) => {
+        searchQuery = e.target.value.trim();
+        renderCV();
+      });
+
+      document.getElementById("modeInteractiveBtn").addEventListener("click", (e) => {
+        document.documentElement.setAttribute("data-mode", "interactive");
+        e.currentTarget.style.borderColor = "var(--accent)";
+        document.getElementById("modeStaticBtn").style.borderColor = "transparent";
+      });
+      document.getElementById("modeStaticBtn").addEventListener("click", (e) => {
+        document.documentElement.setAttribute("data-mode", "static");
+        e.currentTarget.style.borderColor = "var(--accent)";
+        document.getElementById("modeInteractiveBtn").style.borderColor = "transparent";
+      });
+
+      // Auth-Gated Export Button & Cmd+P Interceptor
+      document.getElementById("exportPrintBtn").addEventListener("click", handleExportAttempt);
+      window.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "p") {
+          if (!currentUser) {
+            e.preventDefault();
+            handleExportAttempt();
+          }
+        }
+      });
+
+      document.getElementById("closeExportModalBtn").addEventListener("click", () => {
+        const em = document.getElementById("exportModal");
+        em.classList.add("hidden");
+        em.classList.remove("flex");
+      });
+
+      document.getElementById("downloadStaticHtmlBtn").addEventListener("click", () => {
+        const html = generateCleanStaticHtml();
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "index.html";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById("triggerPrintPdfBtn").addEventListener("click", () => {
+        const em = document.getElementById("exportModal");
+        em.classList.add("hidden");
+        em.classList.remove("flex");
+        window.print();
+      });
+
+      document.querySelectorAll(".studio-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".studio-tab").forEach(b => {
+            b.style.borderColor = b === btn ? "var(--accent)" : "transparent";
+            b.style.color = b === btn ? "var(--ink-primary)" : "var(--ink-muted)";
+            b.style.background = b === btn ? "var(--bg-card)" : "transparent";
+          });
+          document.querySelectorAll(".studio-pane").forEach(p => {
+            p.classList.toggle("hidden", p.id !== `pane-${btn.dataset.tab}`);
+          });
+        });
+      });
+
+      document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          cvState[currentLang].work.forEach(w => { w.activeVariant = btn.dataset.preset; });
+          renderCV();
+          saveState();
+        });
+      });
+
+      document.getElementById("applyTailorBtn").addEventListener("click", () => {
+        const jd = (document.getElementById("jdInput").value || "").toLowerCase();
+        let target = "ai_pm";
+        if (jd.includes("战略") || jd.includes("分析") || jd.includes("strategy")) target = "vc";
+        else if (jd.includes("商业") || jd.includes("增长") || jd.includes("growth")) target = "founder";
+        cvState[currentLang].work.forEach(w => { w.activeVariant = target; });
+        renderCV();
+        saveState();
+      });
+
+      document.getElementById("insertVoiceBtn").addEventListener("click", () => {
+        const val = document.getElementById("voiceInput").value.trim();
+        if (!val) return;
+        const w = cvState[currentLang].work[0];
+        w.variants[w.activeVariant].unshift({
+          label: currentLang === "zh" ? "新增进展" : "New Milestone",
+          text: val
+        });
+        document.getElementById("voiceInput").value = "";
+        renderCV();
+        saveState();
+      });
+
+      document.getElementById("saveCloudConfigBtn").addEventListener("click", () => {
+        const sbUrl = document.getElementById("sbUrlInput").value.trim();
+        const sbKey = document.getElementById("sbAnonKeyInput").value.trim();
+        try {
+          localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify({ sbUrl, sbKey }));
+        } catch (e) {}
+        initSupabase();
+        saveState();
+      });
+
+      // Auth Modal Logic
+      const authModal = document.getElementById("authModal");
+      const statusMsg = document.getElementById("authStatusMsg");
+      document.getElementById("openAuthModalBtn").addEventListener("click", () => {
+        pendingExportAction = false;
+        document.getElementById("authGateBanner").classList.add("hidden");
+        authModal.classList.remove("hidden");
+        authModal.classList.add("flex");
+      });
+      document.getElementById("closeAuthModalBtn").addEventListener("click", () => {
+        authModal.classList.add("hidden");
+        authModal.classList.remove("flex");
+      });
+
+      document.getElementById("sendOtpBtn").addEventListener("click", async () => {
+        const email = document.getElementById("authEmailInput").value.trim();
+        if (!email) return;
+        if (!supabaseClient) {
+          // Local fallback demo code when Supabase URL is not yet configured
+          statusMsg.textContent = "演示模式：请输入任意 6 位数字验证码解锁导出（填入 Supabase URL 后即发真实邮件）";
+          document.getElementById("sentEmailDisplay").textContent = email;
+          document.getElementById("authStepEmail").classList.add("hidden");
+          document.getElementById("authStepOtp").classList.remove("hidden");
+          return;
+        }
+        statusMsg.textContent = "正在发送 6 位验证码...";
+        const { error } = await supabaseClient.auth.signInWithOtp({ email });
+        if (error) {
+          statusMsg.textContent = `发送失败: ${error.message}`;
+        } else {
+          statusMsg.textContent = "";
+          document.getElementById("sentEmailDisplay").textContent = email;
+          document.getElementById("authStepEmail").classList.add("hidden");
+          document.getElementById("authStepOtp").classList.remove("hidden");
+        }
+      });
+
+      document.getElementById("verifyOtpBtn").addEventListener("click", async () => {
+        const email = document.getElementById("authEmailInput").value.trim();
+        const token = document.getElementById("authOtpCodeInput").value.trim();
+        if (!token) return;
+
+        if (!supabaseClient) {
+          if (token.length === 6) {
+            authModal.classList.add("hidden");
+            authModal.classList.remove("flex");
+            await onUserAuthenticated({ id: "local-user", email });
+          } else {
+            statusMsg.textContent = "请输入 6 位数字验证码";
+          }
+          return;
+        }
+
+        statusMsg.textContent = "正在校验验证码...";
+        const { data, error } = await supabaseClient.auth.verifyOtp({
+          email,
+          token,
+          type: "email"
+        });
+        if (error) {
+          statusMsg.textContent = `校验失败: ${error.message}`;
+        } else if (data?.user) {
+          statusMsg.textContent = "验证成功！已解锁导出";
+          authModal.classList.add("hidden");
+          authModal.classList.remove("flex");
+          await onUserAuthenticated(data.user);
+        }
+      });
+
+      document.getElementById("backToEmailStepBtn").addEventListener("click", () => {
+        document.getElementById("authStepOtp").classList.add("hidden");
+        document.getElementById("authStepEmail").classList.remove("hidden");
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,72 +1,237 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zheyi Yang 杨哲亦 · Cactus</title>
-<meta name="description" content="Zheyi Yang (杨哲亦), who signs his work as Cactus.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cactus · 杨哲亦 Zheyi Yang</title>
+<meta name="description" content="Cactus is Zheyi Yang (杨哲亦): linguistics and translation graduate, interpreter, AI filmmaker. 杨哲亦，署名 Cactus：语言学与翻译双学位，口译、AI 影像、黑客松。">
 <link rel="canonical" href="https://holycactus.space/">
+<meta property="og:title" content="Cactus · 杨哲亦 Zheyi Yang">
+<meta property="og:description" content="Cactus = 杨哲亦 = Zheyi Yang">
+<script>
+(function(){var d=document.documentElement,q=new URLSearchParams(location.search).get('lang'),s=null;
+try{s=localStorage.getItem('lang')}catch(e){}
+var l=q||s||(/^zh/i.test(navigator.language||'')?'zh':'en');l=l==='en'?'en':'zh';
+d.setAttribute('data-lang',l);d.lang=l==='en'?'en':'zh-CN';})();
+</script>
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Zheyi Yang",
-  "alternateName": ["杨哲亦", "Cactus", "Holy Cactus"],
-  "url": "https://holycactus.space/",
-  "alumniOf": [
-    {"@type": "CollegeOrUniversity", "name": "Macquarie University"},
-    {"@type": "CollegeOrUniversity", "name": "Nantong University"}
-  ],
-  "sameAs": [
-    "https://www.linkedin.com/in/zheyi-yang-07554129a",
-    "https://bonjour.bio/nm5gsr"
-  ]
-}
+{"@context":"https://schema.org","@type":"Person","name":"Zheyi Yang","alternateName":["杨哲亦","Cactus","Holy Cactus"],"url":"https://holycactus.space/","sameAs":["https://www.linkedin.com/in/zheyi-yang-07554129a"],"alumniOf":[{"@type":"CollegeOrUniversity","name":"Nantong University"},{"@type":"CollegeOrUniversity","name":"Macquarie University"}],"knowsLanguage":["zh","en"]}
 </script>
 <style>
-  body { max-width: 38rem; margin: 4rem auto; padding: 0 1.25rem;
-         font: 17px/1.6 Georgia, "Songti SC", serif; color: #000; background: #fff; }
-  h1 { font-size: 1.4rem; font-weight: normal; margin: 0 0 1.5rem; }
-  h2 { font-size: 1rem; margin: 2.5rem 0 .5rem; }
-  ul { list-style: none; padding: 0; }
-  li { margin: 0 0 .9rem; }
-  .meta { color: #555; font-size: .9rem; }
-  a { color: #000; }
+:root{--fg:#111;--mute:#6b6b6b;--line:#e2e2e2}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--fg);font:17px/1.7 ui-serif,Georgia,"Noto Serif SC","Songti SC",serif}
+main{max-width:42rem;margin:0 auto;padding:4.5rem 1.25rem 14rem}
+h1{font-size:2.6rem;line-height:1.1;margin:0}
+h2{font:600 .78rem/1 ui-sans-serif,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:3.5rem 0 1.2rem}
+h3{font-size:1rem;margin:2rem 0 .6rem}
+p{margin:.4rem 0}
+ul{list-style:none;margin:0;padding:0}
+li{margin:0 0 1.2rem}
+a{color:inherit;text-underline-offset:3px;text-decoration-thickness:1px}
+.aka,.d,.y,footer{color:var(--mute)}
+.d{font-size:.95rem}
+.y{font-variant-numeric:tabular-nums}
+.cv li{margin-bottom:.55rem}
+.cv .y{display:inline-block;min-width:5.2rem}
+.q li{border-left:2px solid var(--fg);padding-left:.9rem}
+figure{margin:.8rem 0;display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}
+figure img{width:100%;display:block}
+figcaption{grid-column:1/-1;font-size:.85rem;color:var(--mute)}
+footer{margin-top:4rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.92rem}
+#lang{position:fixed;top:1rem;right:1rem;z-index:30;background:#fff;border:1px solid var(--fg);padding:.3rem .65rem;font:13px ui-sans-serif,system-ui,sans-serif;cursor:pointer}
+html[data-lang=zh] [lang=en],html[data-lang=en] [lang=zh]{display:none}
+#buddy{position:fixed;right:16px;bottom:0;width:150px;height:190px;z-index:20;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none;opacity:0;transition:opacity .5s}
+#buddy.ready{opacity:1}#buddy.held{cursor:grabbing}
+#buddy canvas{display:block;width:100%;height:100%}
+@media (max-width:640px){body{font-size:16px}main{padding-top:3.5rem}#buddy{width:112px;height:142px;right:6px}}
+@media print{#buddy,#lang{display:none}}
 </style>
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.min.js","three/addons/":"/vendor/three/addons/"}}</script>
+<script type="module" src="/buddy.js"></script>
 </head>
 <body>
-<h1>Zheyi Yang 杨哲亦 <span class="meta">· signs his work as Cactus</span></h1>
+<button id="lang" type="button"><span lang="zh">EN</span><span lang="en">中文</span></button>
+<main>
 
-<p>[One sentence on who you are.] I studied linguistics at Macquarie University (BSc, 2026) after two years at Nantong University. Based in Shanghai.</p>
+<header>
+<h1>Cactus</h1>
+<p class="aka">杨哲亦 · Zheyi Yang</p>
+<!-- 下面两句可删：你 10/27 想首页只留 Based in Shanghai & Hangzhou -->
+<p lang="zh">语言学与翻译出身（南通大学 × 麦考瑞大学 2+2 双学位，2026 届）。做口译、中英文写作和 AI 影像，打黑客松；2026 年夏天在北大上了一门脑机接口实验课。在上海和杭州。</p>
+<p lang="en">Linguistics and translation graduate (Nantong University × Macquarie University, 2+2 dual degree, 2026). I interpret, write in Chinese and English, make AI films and build at hackathons. In summer 2026 I took a brain–computer interface lab course at Peking University. Based in Shanghai and Hangzhou.</p>
+<p class="d" lang="zh">片尾、黑客松 pitch 和网名写 Cactus，学位和证书写杨哲亦。是同一个人。</p>
+<p class="d" lang="en">Film credits, pitch decks and handles say Cactus; degrees and certificates say 杨哲亦 / Zheyi Yang. Same person.</p>
+</header>
 
-<h2>Work</h2>
+<section>
+<h2><span lang="zh">作品</span><span lang="en">Work</span></h2>
 <ul>
-<li><a href="/zui-next-frame/">Zui · Next Frame 醉·下一帧</a> (2026)<br>
-<span class="meta">Author. AI moving image and four posters for AIGC ASIA 2026. After Liang Kai, <i>Immortal in Splashed Ink</i>, National Palace Museum, Taipei (Open Data, CC BY 4.0).</span></li>
-<li><a href="https://joinkuku.com/">kuku</a>, brand film (2026)<br>
-<span class="meta">Script supervisor and production assistant. Directed by Tab Yang; D42 Creative Studio × Spark Lab.</span></li>
-<li><a href="https://ptoq.io/work">Murmur 沐耳</a>, with [p→q] (2026)<br>
-<span class="meta">[ Contributor ].</span></li>
-<li>PinVerse smart pin display, 汇智卓创 (2026)<br>
-<span class="meta">Operations and communications. Exhibited at AdventureX 2026, Hangzhou.</span></li>
+<li>
+<p><b lang="zh">《醉·下一帧》</b><b lang="en">Zui · Next Frame 醉·下一帧</b> <span class="y">2026</span></p>
+<p class="d" lang="zh">作者。为 AIGC ASIA 2026 创作：四幅海报和一段动态影像。方法是取古画里被定格的一瞬，用 AI 补出它之前和之后；这一件以梁楷《泼墨仙人图》为定格，前后延伸到澳门鱼行醉龙节。</p>
+<p class="d" lang="en">Author. Four posters and a short moving image made for AIGC ASIA 2026. The method: take the single frozen instant in a classical painting and let AI imagine the moments before and after. Here, Liang Kai's Immortal in Splashed Ink, carried forward into Macau's Feast of the Drunken Dragon.</p>
+<!-- TODO: 图放进 /assets/zui/ 后取消注释
+<figure>
+<img src="/assets/zui/1.webp" alt="醉前举杯 Before: raising the cup" loading="lazy">
+<img src="/assets/zui/2.webp" alt="原画定格 The frozen frame" loading="lazy">
+<img src="/assets/zui/3.webp" alt="墨化龙 Ink becomes dragon" loading="lazy">
+<img src="/assets/zui/4.webp" alt="醉龙舞者 The drunken dragon dancer" loading="lazy">
+<figcaption>醉前举杯 · 原画定格 · 墨化龙 · 醉龙舞者</figcaption>
+</figure> -->
+<p class="d" lang="zh">原画：梁楷《泼墨仙人图》，台北故宫博物院藏，Open Data，<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>。本作品含 AI 生成内容，工具为 Zopia.ai。</p>
+<p class="d" lang="en">Source painting: Liang Kai, Immortal in Splashed Ink, National Palace Museum, Taipei (Open Data, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>). Contains AI-generated content, made with Zopia.ai.</p>
+</li>
+<li>
+<p><a href="https://joinkuku.com/">kuku</a> <span lang="zh">品牌片</span><span lang="en">brand film</span> <span class="y">2026</span></p>
+<p class="d" lang="zh">场记、制片助理（片尾署名 Cactus）。导演 Tab Yang；D42 Creative Studio × Spark Lab 出品。</p>
+<p class="d" lang="en">Script supervisor and production assistant (credited as Cactus). Directed by Tab Yang; produced by D42 Creative Studio × Spark Lab.</p>
+</li>
+<li>
+<p><a href="https://ptoq.io/work"><span lang="zh">沐耳 Murmur（p→q）</span><span lang="en">Murmur 沐耳, by p→q</span></a> <span class="y">2026</span></p>
+<p class="d" lang="zh">把哼唱变成一张音乐卡片的网页应用。pitch 末页署名 Cactus。</p>
+<p class="d" lang="en">A web app that turns a hummed melody into a music card. Credited as Cactus on the pitch deck.</p>
+<!-- TODO: 写一句你在沐耳里具体做了什么；PR 合并之前不写 Contributor -->
+</li>
+<li>
+<p><span lang="zh">PinVerse 智能吧唧展示架（汇智卓创）</span><span lang="en">PinVerse smart pin display (Huizhi Zhuochuang)</span> <span class="y">2026</span></p>
+<p class="d" lang="zh">外部运营与传播。AdventureX 2026 杭州参展。</p>
+<p class="d" lang="en">External operations and communications. Exhibited at AdventureX 2026, Hangzhou.</p>
+</li>
+</ul>
+</section>
+
+<section>
+<h2><span lang="zh">学习</span><span lang="en">Study</span></h2>
+<ul>
+<li>
+<p><span lang="zh">南通大学 × 麦考瑞大学 2+2 双学位</span><span lang="en">Nantong University × Macquarie University, 2+2 dual degree</span> <span class="y">2022–2026</span></p>
+<p class="d" lang="zh">南通大学 翻译专业（文学学士）；麦考瑞大学 Bachelor of Linguistics and Language Sciences，获 Macquarie University China Elite Scholarship（AUD 10,000）。</p>
+<p class="d" lang="en">BA in Translation and Interpreting, Nantong University; Bachelor of Linguistics and Language Sciences, Macquarie University (China Elite Scholarship, AUD 10,000).</p>
+</li>
+<li>
+<p><span lang="zh">北京大学暑期学校：脑机接口技术前沿与实践</span><span lang="en">PKU Summer School: Brain-Machine Interfaces and Bioelectronics</span> <span class="y">2026</span></p>
+<p class="d" lang="zh">学分课，郑雨晴授课，信息科学技术学院开课。40 学时里 20 学时是实验：设计、微纳加工和测试柔性神经电极阵列，用于手势识别。</p>
+<p class="d" lang="en">For-credit course taught by Zheng Yuqing, offered by PKU's School of EECS. 20 of its 40 hours were lab work: designing, microfabricating and testing flexible neural electrode arrays for gesture recognition.</p>
+<!-- TODO: 有课程页或成绩单链接就挂上 -->
+</li>
+<li>
+<p><span lang="zh">北大–圣母大学暑期哲学项目：生物学哲学（旁听）</span><span lang="en">PKU–Notre Dame summer philosophy program: philosophy of biology (audit)</span> <span class="y">2026</span></p>
+<p class="d" lang="zh">主讲 <a href="https://matthewsims5.com/">Matthew Sims 博士</a>（麦考瑞大学）。</p>
+<p class="d" lang="en">Module taught by <a href="https://matthewsims5.com/">Dr. Matthew Sims</a> (Macquarie University).</p>
+</li>
+<li>
+<p><span lang="zh">鲲鹏计划（江苏省政府奖学金）· 东京大学短期课程</span><span lang="en">Kunpeng Program (Jiangsu Government Scholarship) · University of Tokyo short course</span> <span class="y">2025</span></p>
+<p class="d" lang="zh">Artificial Intelligence and Scientific Literacy：最佳 Presenter、满分学员、最佳小组。</p>
+<p class="d" lang="en">Artificial Intelligence and Scientific Literacy: Best Presenter, full marks, Best Group.</p>
+</li>
+<li>
+<p><span lang="zh">国家级大学生创新训练项目 主持人</span><span lang="en">PI, national undergraduate innovation project</span> <span class="y">2024–2025</span></p>
+<p class="d" lang="zh">积极老龄化视角下老年人媒介形象的话语建构及历史变迁。</p>
+<p class="d" lang="en">How media discourse has constructed older adults, and how that image changed, from an active-ageing perspective.</p>
+</li>
+</ul>
+</section>
+
+<section>
+<h2><span lang="zh">履历</span><span lang="en">Résumé</span></h2>
+
+<h3><span lang="zh">口译与片场</span><span lang="en">Interpreting and production</span></h3>
+<ul class="cv">
+<li><span class="y">2025.11</span><span lang="zh">首届中非使节走进南通 × 远川（南通）中非家纺产能示范园：南苏丹副大使陪同口译；策展方 CEO 助理、场控</span><span lang="en">First African Envoys' Visit to Nantong, at the Yuanchuan China–Africa home-textile park: liaison interpreter for South Sudan's Deputy Ambassador; assistant to the curating agency's CEO and floor manager</span></li>
+<li><span class="y">2025.8</span><span lang="zh">配音演员，新片场 Dir Cut《京东 × 网易云音乐 七夕献映｜慢慢喜欢你》</span><span lang="en">Voice actor, 慢慢喜欢你 (Slowly Falling for You), a JD × NetEase Cloud Music Qixi short (Dir Cut, Xinpianchang)</span></li>
+<li><span class="y">2025.6</span><span lang="zh">第 18 届上海国际水展 口译志愿者</span><span lang="en">Volunteer interpreter, Watertech China (18th Shanghai International Water Show)</span></li>
+<li><span class="y">2024.8</span><span lang="zh">Robert Menzies College 迎新小报 The Voice 编辑：采访、编辑、分发</span><span lang="en">Editor, The Voice (orientation newsletter), Robert Menzies College: interviews, editing, distribution</span></li>
+<li><span class="y">2023.11</span><span lang="zh">第五届南通船舶海工产业展 陪同口译</span><span lang="en">Escort interpreter, 5th Nantong Shipbuilding and Offshore Engineering Expo</span></li>
+<!-- 可选：<li><span class="y">2026</span>Spark Lab creative media（社交媒体）</li> -->
 </ul>
 
-<h2>Study</h2>
-<ul>
-<li>Philosophy of biology, PKU–Notre Dame summer program (2026)<br>
-<span class="meta">Audited the module taught by <a href="https://matthewsims5.com/">Dr. Matthew Sims</a>.</span></li>
-<li>PKU Summer School: brain–computer interfaces (2026)<br>
-<span class="meta">Short stay in Zheng Yuqing's lab, School of Integrated Circuits.</span></li>
-<li>Kunpeng Program exchange, University of Tokyo (2025)<br>
-<span class="meta">Best group; best presenter.</span></li>
+<h3><span lang="zh">黑客松与 AI</span><span lang="en">Hackathons and AI</span></h3>
+<ul class="cv">
+<li><span class="y">2026.8</span><span lang="zh">Vivi 创作者黑客松（上海）二次开发赛道 亚军，与杜家一组队</span><span lang="en">Runner-up, build-on track, Vivi Creator Hackathon, Shanghai (team with Jiayi Du)</span></li>
+<li><span class="y">2026.6</span><span lang="zh">美团 Tabbit 妙招大赛（南通大学站）二等奖</span><span lang="en">2nd prize, Meituan Tabbit challenge (Nantong University stop)</span></li>
+<li><span class="y">2026.5</span><span lang="zh">字节 TRAE on Campus（南通大学站）三等奖</span><span lang="en">3rd prize, ByteDance TRAE on Campus (Nantong University stop)</span></li>
+<li><span class="y">2026.4</span><span lang="zh">ROS 春季学校 四足机器人二次开发接口 课代表</span><span lang="en">Class representative, quadruped robot SDK module, ROS Spring School</span><!-- TODO: 主办方全称 --></li>
+<li><span class="y">2026.1</span><span lang="zh">观猹 × 魔搭社区环球黑客松（杭州站）优胜奖，担任产品经理</span><span lang="en">Merit Award, Watcha × ModelScope Global Hackathon, Hangzhou (product manager)</span></li>
+<li><span class="y">2025.8</span><span lang="zh">港科大 AI 小镇 Aivilization 财富榜第一</span><span lang="en">No. 1 on the wealth leaderboard, Aivilization (HKUST's AI town)</span></li>
 </ul>
 
+<h3><span lang="zh">社群与教学</span><span lang="en">Community and teaching</span></h3>
+<ul class="cv">
+<li><span class="y">2026.8</span><span lang="zh">小红书 vibecoding 特别约稿创作者</span><span lang="en">Commissioned vibe-coding creator, Xiaohongshu</span></li>
+<li><span class="y">2026.7</span><span lang="zh">北大暑期学校 Coffee Chat 发起人；Bonjour（社交名片初创）北大暑期学校校园大使；观猹 AI 产品经理共学营助教</span><span lang="en">Started the Coffee Chats at PKU Summer School; campus ambassador there for Bonjour, a social-card startup; teaching assistant, Watcha AI product manager co-learning camp</span></li>
+<li><span class="y">2022–2026</span><span lang="zh">南通大学演辩中心成员，2025.11 起任助教</span><span lang="en">Member, Nantong University Debate and Speech Center; teaching assistant from Nov 2025</span></li>
+</ul>
+
+<h3><span lang="zh">语言与证书</span><span lang="en">Languages and certificates</span></h3>
+<ul class="cv">
+<li><span lang="zh">中文母语；英语：雅思 7.0（听力、阅读 8.0，2023）</span><span lang="en">Chinese (native); English: IELTS 7.0, Listening and Reading 8.0 (2023)</span></li>
+<li><span lang="zh">上海外语口译证书 高级（2024）；英语专业四级 优秀（2024）；国才考试 中级（2022）</span><span lang="en">Shanghai Interpretation Accreditation, Advanced (2024); TEM-4, Excellent (2024); ETIC, Intermediate (2022)</span></li>
+<li><span lang="zh">全国导游资格证（英语，2025）</span><span lang="en">National Tour Guide Qualification, English (2025)</span></li>
+</ul>
+
+<h3><span lang="zh">奖项</span><span lang="en">Awards</span></h3>
+<ul class="cv">
+<li><span class="y">2025.3</span><span lang="zh">小米摄影夜校（中国大运河博物馆站）优秀作品奖</span><span lang="en">Excellent Work award, Xiaomi Photography Night School (China Grand Canal Museum)</span></li>
+<li><span class="y">2024.7</span><span lang="zh">第十届 LSCAT 杯江苏省笔译大赛 英译汉、汉译英 本科组 省三等奖</span><span lang="en">3rd prize in both English–Chinese and Chinese–English, 10th LSCAT Cup Jiangsu Translation Contest (undergraduate)</span></li>
+<li><span class="y">2023–24</span><span lang="zh">南通大学辩论赛 第 25 届特等奖、第 26 届一等奖</span><span lang="en">Special Prize (25th) and 1st Prize (26th), Nantong University Debate Championship</span></li>
+<li><span class="y">2022–23</span><span lang="zh">南通大学校二等奖学金</span><span lang="en">Second-class scholarship, Nantong University</span></li>
+<li><span class="y">2022.10</span><span lang="zh">外研社·国才杯英语演讲 江苏省三等奖、校特等奖</span><span lang="en">FLTRP·ETIC Cup English Public Speaking: Jiangsu 3rd prize; campus Special Prize</span></li>
+<li><span class="y">2017</span><span lang="zh">全国中学生英语能力竞赛 初二组 全国一等奖；江苏省无线电测向锦标赛 初中组团体第二（翠岗中学）</span><span lang="en">National 1st prize, National English Competition for Secondary School Students (Grade 8); team 2nd, junior division, Jiangsu Radio Direction Finding Championships</span></li>
+</ul>
+</section>
+
+<section>
+<h2><span lang="zh">几件小事</span><span lang="en">Small facts</span></h2>
+<ul>
+<li><span lang="zh">我第一个影视片尾署名写的是 Cactus。这个网站就是 Cactus 和杨哲亦对上号的地方。</span><span lang="en">My first film credit reads "Cactus". This site is where Cactus and Zheyi Yang meet.</span></li>
+<!-- 下面这条的前后串联是 Ailoha 写的，留不留你定 -->
+<li><span lang="zh">初中我在无线电测向队，拿着天线找藏起来的信号源。2026 年，我在北大做读取人体电信号的电极。</span><span lang="en">In middle school I did radio direction finding, antenna in hand, hunting hidden transmitters. In 2026 I was in a PKU lab making electrodes that read the body's electrical signals.</span></li>
+<!-- 下面这条把两门课并在一起，也是 Ailoha 的写法 -->
+<li><span lang="zh">2026 年 7 月 13 日到 17 日那一周：上午在 Sims 的课上讨论一个系统怎样才算活着，下午在实验课上做柔性电极。</span><span lang="en">The week of 13–17 July 2026: mornings in Matthew Sims's class on when a system counts as alive, afternoons making flexible electrodes in the lab.</span></li>
+<li><span lang="zh">那门哲学课结束时，我提的问题是：图灵测试 2.0 应该怎么设计？</span><span lang="en">At the end of that philosophy course, my question was: how would you design a Turing Test 2.0?</span></li>
+<li><span lang="zh">在 Aivilization 里，我靠不断囤能产金币的 B200 芯片冲到财富榜第一。我的 agent 已经什么都不缺了，我还是想让它继续扩张。那之后我理解了，吃穿不愁的人为什么还要不停扩张。</span><span lang="en">In Aivilization I topped the wealth leaderboard by hoarding B200 chips that minted coins. My agent lacked nothing, and I still wanted it to own more. That's when I understood why people who already have enough keep expanding.</span></li>
+<li><span lang="zh">我会把现场看到的真实争执加上几个假设，改成道德思想实验，再看 AI 会不会悄悄站队。</span><span lang="en">I turn real arguments I witness into moral thought experiments, add a few hidden variables, and check whether an AI quietly takes a side.</span></li>
+<li><span lang="zh">我给一部七夕短片配过音，也有一张英语导游证。</span><span lang="en">I've voiced a Qixi short film, and I hold an English-language tour guide licence.</span></li>
+<li><span lang="zh">Cactus 是一个穿绿大衣的人，不是一棵仙人掌。右下角那个就是他，可以拎起来。</span><span lang="en">Cactus is a person in a green coat, not a plant. That's him in the corner. You can pick him up.</span></li>
+</ul>
+</section>
+
+<section>
+<h2><span lang="zh">我说过的话</span><span lang="en">Things I've said</span></h2>
+<p class="d" lang="zh">这一栏只收我自己说过的话。</p>
+<p class="d" lang="en">Only my own words go here; the translations are mine.</p>
+<!-- TODO: 下面多数来自对话记录的转述，发布前按你当时的原话逐句改 -->
+<ul class="q">
+<li><span class="y">2026.10</span> <span lang="zh">可以牺牲画面效果和质量，但剧情必须足够惊艳。</span><span lang="en">I can give up image quality. The story still has to stun.</span></li>
+<li><span class="y">2026.10</span> <span lang="zh">60 到 80 分也一定要交出来。</span><span lang="en">Sixty to eighty out of a hundred is fine. It still has to ship.</span></li>
+<li><span class="y">2026.10</span> <span lang="zh">历史里留下来的，常常是局部最优，而不是全局最优。</span><span lang="en">What history keeps is often a local optimum, not the global one.</span></li>
+<li><span class="y">2026.10</span> <span lang="zh">主办方和资本一样，出钱买创作者最强护城河的时间。</span><span lang="en">Competition organisers, like investors, pay for a creator's time while it is their strongest moat.</span></li>
+<li><span class="y">2026.10</span> <span lang="zh">规划和对自己的拟合是同时进行的。</span><span lang="en">Planning and fitting a model of myself happen at the same time.</span></li>
+<li><span class="y">2026.10</span> <span lang="zh">访谈不等于关系。先有合作，关系才成立。</span><span lang="en">An interview is not a relationship. Work together first; the relationship follows.</span></li>
+<li><span class="y">2026.10</span> <span lang="zh">做执行的人应该得到更优厚的对待。</span><span lang="en">The people who do the execution deserve better treatment.</span></li>
+<li><span class="y">2026.11</span> <span lang="zh">挂机的快感就是验收那一刻：自己没付出劳动，却拿到了结果。</span><span lang="en">The joy of idle games is the moment of acceptance: no labour from you, and still the result.</span></li>
+</ul>
+</section>
+
+<section>
 <h2>Log</h2>
-<ul>
-<li>2026-10-16 · Site opened.</li>
+<ul class="cv">
+<li><span class="y">2026-11-01</span><span lang="zh">v2：中英双语、履历、《醉·下一帧》首次公开，以及一个会看你鼠标的小人。</span><span lang="en">v2: bilingual, résumé, first public showing of Zui · Next Frame, and a small me who watches your cursor.</span></li>
+<li><span class="y">2026-10-16</span><span lang="zh">开站。</span><span lang="en">Site opened.</span></li>
 </ul>
+</section>
 
-<p class="meta">[name] [at] 163.com · <a href="https://www.linkedin.com/in/zheyi-yang-07554129a">LinkedIn</a> · <a href="/cv-2026-10.pdf">CV (Oct 2026)</a></p>
-<p class="meta">I research with AI tools and mark which ideas are mine.</p>
+<footer>
+<p>holycactus [at] mail.grokbot.com · <a href="https://www.linkedin.com/in/zheyi-yang-07554129a">LinkedIn</a> · Bilibili @Holy_Cactus<!-- TODO: 换成B站空间链接；加 GitHub 链接 --></p>
+<p lang="zh">我用 AI 工具做调研和起草，并标明哪些想法是我自己的；“我说过的话”一栏只收我的原话。</p>
+<p lang="en">I research and draft with AI tools and mark which ideas are mine. "Things I've said" holds only my own words.</p>
+</footer>
+</main>
+
+<div id="buddy" aria-hidden="true"><canvas></canvas></div>
+<script>
+document.getElementById('lang').onclick=function(){var d=document.documentElement,l=d.getAttribute('data-lang')==='en'?'zh':'en';d.setAttribute('data-lang',l);d.lang=l==='en'?'en':'zh-CN';try{localStorage.setItem('lang',l)}catch(e){}};
+</script>
 </body>
 </html>
